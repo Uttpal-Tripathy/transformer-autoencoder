@@ -86,6 +86,25 @@ from a small prototype config to a measured parameter count for configs from 50M
 includes optional research extensions (contrastive/robustness latent losses, embedding
 extraction, reconstruction-error anomaly scoring).
 
+## Tested on real hardware: NVIDIA GeForce GTX 1650 (4GB)
+
+Actually run on a local 4GB consumer GPU (`nvidia-smi` reports "NVIDIA GeForce GTX 1650",
+CUDA 13.0 driver, compute capability 7.5) to get honest numbers instead of estimates:
+
+| Config | Params | Result on this GPU |
+|---|---|---|
+| Full 1.04B config, fp16, inference only | 1,041,747,456 | **Fits, barely** -- forward pass (batch=1, seq=16) peaked at 4.30GB, i.e. the entire card. Zero headroom; can't grow batch/seq, and training (gradients + optimizer state) is not feasible at this size. |
+| ~100M, fp32, real training step | 156.8M | **Comfortably fits** in dedicated VRAM (3.17GB peak) with room to spare for a larger batch. |
+| ~150-200M, fp32, real training step | 231-297M | Only "succeeds" by silently spilling past the physical 4.29GB into slow Windows shared system memory (WDDM overcommit) -- `torch` doesn't raise an OOM error, but this is not real, fast VRAM usage and would tank training throughput. Not a reliable ceiling. |
+
+**Practical takeaway for a 4GB card:** train in the ~100-150M range (see the `CONFIGS` scaling
+table in `notebooks/RAE1B_Colab_Complete.ipynb`, Step 37) for real, fast local training;
+reserve the full ~1B config for CPU/GPU-cluster pretraining or fp16 inference-only spot checks.
+Installing CUDA-enabled PyTorch on Windows: match the wheel to your driver's CUDA capability,
+e.g. `pip install torch --index-url https://download.pytorch.org/whl/cu130` (check
+`pip index versions torch --index-url https://download.pytorch.org/whl/cuXXX` for what's built
+against your driver).
+
 ## Scaling to a real pretraining run
 
 - Swap `data/generate_corpus.py`'s output for a real corpus (web text, books, code, etc.) --
