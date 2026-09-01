@@ -1,0 +1,17 @@
+name: transformer-autoencoder
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - torch>=2.1
+      - tokenizers>=0.15
+      - openai>=1.30
+      - anthropic>=0.34
+      - jupyter>=1.0
+      - nbclient>=0.10
+      - matplotlib>=3.8
+      - python-dotenv>=1.0
+      - pyyaml
+      - tqdm

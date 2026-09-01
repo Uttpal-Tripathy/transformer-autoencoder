@@ -32,8 +32,21 @@ decoder, tied-embedding projection, loss) is correct. Point it at more data and 
 
 ## Setup
 
+Pick one:
+
 ```bash
+# pip + requirements.txt
 pip install -r requirements.txt
+
+# pip + pyproject.toml (installs this repo as a package; add [notebooks] for Jupyter/matplotlib/dotenv)
+pip install -e ".[notebooks]"
+
+# conda, combined env (Python + all pip deps in one file)
+conda env create -f environment.yml
+conda activate transformer-autoencoder
+```
+
+```bash
 cp .env.example .env   # fill in OPENAI_API_KEY and ANTHROPIC_API_KEY, then `set -a; source .env; set +a`
 ```
 
@@ -62,6 +75,16 @@ python train.py --corpus data/corpus.txt --tokenizer-dir tokenizer/vocab --steps
 Notebook 4 defaults to a small `DEMO_CONFIG` (a few million params) so it runs on a laptop CPU;
 flip `USE_FULL_SIZE_MODEL = True` once you're on hardware that can hold the real ~1.04B-param
 model (see the RAM/GPU notes below).
+
+There's also `notebooks/RAE1B_Colab_Complete.ipynb`: a self-contained, ~40-step Colab
+walkthrough of the same idea with a different implementation flavor (RoPE positional
+embeddings, SwiGLU feed-forward, RMSNorm, mask/delete/replace noise, optional gradient
+checkpointing) and no external API dependency -- everything is defined inline in the
+notebook, so you can drop it straight into Colab without cloning this repo. It builds up
+from a small prototype config to a measured parameter count for configs from 50M through
+~1B (via `torch.device("meta")`, so even the 1B row costs no real memory to check), and
+includes optional research extensions (contrastive/robustness latent losses, embedding
+extraction, reconstruction-error anomaly scoring).
 
 ## Scaling to a real pretraining run
 
