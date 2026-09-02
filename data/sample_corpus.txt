@@ -1,0 +1,85 @@
+Neural networks learn to approximate complex functions by adjusting millions of internal weights during training.
+A transformer processes an entire sequence at once using self-attention instead of reading it one token at a time.
+Attention lets a model decide which earlier tokens matter most when predicting the next one.
+Gradient descent nudges every parameter a small step in the direction that reduces the loss.
+Overfitting happens when a model memorizes the training data instead of learning general patterns.
+A validation set is held back from training so researchers can check how well a model generalizes.
+Backpropagation computes how much each weight contributed to the final error.
+Word embeddings map each token to a dense vector that captures some of its meaning.
+Layer normalization keeps activations in a stable range so deep networks train more reliably.
+Dropout randomly disables some neurons during training to prevent the network from relying on any single one.
+An encoder compresses an input sequence into a fixed or variable length internal representation.
+A decoder expands a latent representation back into a full output sequence, one token at a time.
+Autoencoders learn to reconstruct their input after passing it through a narrow bottleneck layer.
+Denoising autoencoders are trained on corrupted inputs so they learn features robust to noise.
+Cross entropy loss measures how far a predicted probability distribution is from the true label.
+Learning rate warmup slowly increases the step size at the start of training to avoid early instability.
+A cosine decay schedule gradually lowers the learning rate as training approaches its final steps.
+Batch size controls how many examples the optimizer looks at before updating the weights.
+Tokenization splits raw text into smaller units, such as subwords, that a model can process.
+Byte pair encoding builds a vocabulary by repeatedly merging the most frequent pairs of symbols.
+A large vocabulary shortens sequences but increases the size of the embedding and output layers.
+Positional encodings give a transformer information about the order of tokens in a sequence.
+Rotary position embeddings rotate query and key vectors by an angle that depends on their position.
+Multi head attention runs several attention computations in parallel and then combines the results.
+Weight tying shares the same matrix between the input embedding and the output projection layer.
+Gradient clipping caps the size of gradients so a single bad batch cannot destabilize training.
+Mixed precision training uses lower precision numbers for most operations to save memory and time.
+Gradient checkpointing trades extra computation for lower memory use by recomputing activations during the backward pass.
+A learning curve plots how the loss changes over the course of training.
+Data augmentation creates new training examples by slightly modifying existing ones.
+A GPU can run thousands of small arithmetic operations in parallel, which suits matrix multiplication well.
+VRAM is the dedicated memory on a graphics card that stores model weights and activations during training.
+When a workload exceeds available GPU memory, some systems fall back to slower shared system memory.
+CUDA is the programming interface that lets software run general purpose computations on an NVIDIA GPU.
+Mixed precision arithmetic stores numbers in sixteen bits instead of thirty two to save memory.
+An optimizer like AdamW keeps a running estimate of the mean and variance of past gradients for each parameter.
+Checkpointing periodically saves a model's weights so training can resume after an interruption.
+Distributed training splits a model or its data across multiple GPUs to speed up training.
+A batch of data is a small group of examples processed together in a single forward and backward pass.
+Profiling a training run reveals which operations consume the most time or memory.
+An intrusion detection system watches network traffic for patterns that suggest an attack is underway.
+Anomaly detection flags behavior that differs significantly from a system's established baseline.
+Encryption scrambles data so that only someone with the correct key can read it.
+A firewall filters incoming and outgoing network traffic according to a set of security rules.
+Phishing attacks trick people into revealing passwords or other sensitive information.
+Multi factor authentication requires more than one piece of evidence before granting access to an account.
+A denial of service attack overwhelms a system with traffic until it can no longer respond to legitimate requests.
+Network latency is the time it takes for a packet of data to travel from sender to receiver.
+Bandwidth measures how much data a network connection can carry in a given amount of time.
+A virtual private network routes traffic through an encrypted tunnel to protect it from eavesdropping.
+Packet loss occurs when data traveling across a network fails to reach its destination.
+Load balancing spreads incoming requests across multiple servers so no single one becomes overwhelmed.
+A zero day vulnerability is a flaw that attackers exploit before the vendor has released a fix.
+Access control lists specify exactly which users or systems are permitted to reach a given resource.
+Log analysis helps security teams reconstruct the sequence of events during an incident.
+Photosynthesis converts sunlight, water, and carbon dioxide into glucose and oxygen inside plant cells.
+The speed of light in a vacuum is approximately three hundred thousand kilometers per second.
+DNA carries the genetic instructions used in the growth and functioning of living organisms.
+A black hole forms when a massive star collapses under its own gravity at the end of its life.
+Tectonic plates are large slabs of rock that slowly shift across the surface of the earth.
+Vaccines train the immune system to recognize and fight a specific pathogen without causing the disease itself.
+The water cycle describes how water evaporates, forms clouds, falls as precipitation, and flows back to the sea.
+An ecosystem includes all the living organisms in an area along with the physical environment they interact with.
+Climate refers to long term weather patterns, while weather describes conditions at a specific place and time.
+Antibiotics work by killing bacteria or preventing them from reproducing, but they have no effect on viruses.
+She packed a small bag, checked the weather forecast, and set out on the mountain trail before sunrise.
+To brew a good cup of coffee, grind the beans just before use and keep the water just off the boil.
+The old library smelled of paper and dust, and sunlight fell in long stripes across the reading tables.
+He tightened the last bolt, wiped his hands on a rag, and stepped back to admire the finished bookshelf.
+The recipe calls for two cups of flour, a pinch of salt, and enough water to form a soft dough.
+After the storm passed, the fishermen returned to the harbor to check on their boats and nets.
+The museum's new exhibit traces the history of printing from hand carved blocks to modern digital presses.
+A gentle breeze moved through the open window as the orchestra tuned their instruments before the concert.
+The train pulled slowly into the station, and passengers gathered their bags along the platform.
+Before starting the assembly, lay out every part and check them against the included diagram.
+The new dashboard gives operations teams a single view of system health across every region.
+Customer feedback from the beta program shaped several of the features in this release.
+The onboarding flow now takes new users through setup in under five minutes.
+Quarterly reviews compare current performance against the targets set at the start of the year.
+The support team tracks response times to make sure customer issues are resolved quickly.
+A well documented API makes it easier for developers to integrate a service into their own applications.
+Version control lets a team track every change to a codebase and revert mistakes when necessary.
+Automated tests catch regressions before they reach production and affect real users.
+A staging environment mirrors production closely enough to catch problems before deployment.
+Clear release notes help users understand what changed and why it matters to them.
