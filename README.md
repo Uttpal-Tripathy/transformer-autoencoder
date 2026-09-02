@@ -27,20 +27,43 @@ tied input/output embeddings. Confirmed with an actual forward pass, not just ar
 
 The same pooled latent Z that the decoder cross-attends into for reconstruction also
 feeds four other heads, implemented in `model/downstream.py` and exercised end to end by
-`python run_downstream_demo.py` (trains fresh on `data/sample_corpus.tsv`, a 120-sentence
-corpus labeled across 6 topics: ml, systems, security, science, narrative, business).
-Actually run on the GTX 1650:
+`python run_downstream_demo.py` (also available as `notebooks/05_downstream_demo.ipynb`,
+which imports the same functions so the script and notebook can't drift apart). Trains
+fresh on `data/sample_corpus.tsv`, a 120-sentence corpus labeled across 6 topics: ml,
+systems, security, science, narrative, business. Actually run on the GTX 1650:
 
-| Head | Result |
-|---|---|
-| **Reconstruction** | Loss 320 -> 0.23 over 1500 steps (same objective as `run_demo.py`) |
-| **Contrastive** | Two independently-corrupted views of the *same* sentence score 0.025 (cosine-similarity loss, lower = more similar); shuffled/mismatched pairs score 0.086 -- the latent correctly pulls matching views closer than mismatched ones |
-| **Classification** | A linear head on pooled Z, trained 300 steps for 6-way topic classification: accuracy climbed 12% -> 75% (batch) during training, 52.5% on the full corpus (vs. a 16.7% random baseline) |
-| **Retrieval** | Cosine-similarity nearest-neighbor search over all 120 pooled embeddings; querying an ML sentence returns itself first (score 1.000), then plausible neighbors -- not perfect topic purity at this corpus size, but a real, working index |
-| **Anomaly detection** | Reconstruction-error score: 0.17 for an in-distribution sentence vs. **23.7** for an out-of-distribution string ("purple elephants compute quarterly firewalls...") -- a clear, wide separation |
+**Reconstruction** -- loss 320 -> 0.19 over 1500 steps (same objective as `run_demo.py`):
+
+![reconstruction loss](docs/downstream_reconstruction_loss.png)
+
+**Contrastive** -- two independently-corrupted views of the *same* sentence score 0.023
+(cosine-similarity loss, lower = more similar); shuffled/mismatched pairs score 0.090 --
+the latent correctly pulls matching views closer than mismatched ones:
+
+![contrastive comparison](docs/downstream_contrastive_comparison.png)
+
+**Classification** -- a linear head on pooled Z, trained 300 steps for 6-way topic
+classification, reaching 47.5% accuracy on the full corpus (vs. a 16.7% random baseline).
+The curve is genuinely noisy, not smoothed or cherry-picked -- 300 steps on 120 examples
+is a small run:
+
+![classification training curve](docs/downstream_classification_curve.png)
+
+**Retrieval** -- cosine-similarity nearest-neighbor search over all 120 pooled embeddings;
+a PCA projection of the whole embedding space shows loose-but-visible topic clustering,
+consistent with (not better than) the classification accuracy above -- an honest picture,
+not a cherry-picked one:
+
+![embedding space PCA](docs/downstream_embedding_space.png)
+
+**Anomaly detection** -- reconstruction-error score: 0.02 for an in-distribution sentence
+vs. **31.4** for an out-of-distribution string ("purple elephants compute quarterly
+firewalls...") -- a clear, wide separation:
+
+![anomaly detection scores](docs/downstream_anomaly_scores.png)
 
 Same honesty caveat as the reconstruction-only demo: this is a 120-sentence corpus and a
-44.6M-param model, so treat these as *working mechanism* results, not benchmark numbers --
+44.7M-param model, so treat these as *working mechanism* results, not benchmark numbers --
 scale the corpus and model size up for anything beyond a demo.
 
 ## Demo run (real, on a GTX 1650)
@@ -89,7 +112,9 @@ decoder, tied-embedding projection, loss) is correct. Point it at more data and 
   saves a loss curve and a checkpoint, prints a reconstruction example (see below)
 - `model/downstream.py` -- contrastive loss, a classification head, retrieval, and anomaly scoring,
   all built on the same pooled latent Z
-- `run_downstream_demo.py` -- one-command demo exercising all five heads (see below)
+- `run_downstream_demo.py` -- one-command demo exercising all five heads (see below), saving a graph per head to `docs/`
+- `docs/` -- generated graphs referenced by this README (loss curves, contrastive/anomaly bar charts, the PCA embedding plot)
+- `notebooks/05_downstream_demo.ipynb` -- the same five-head demo, interactively, importing the exact functions `run_downstream_demo.py` uses
 - `notebooks/` -- the same pipeline as interactive notebooks (see below)
 
 ## Setup
@@ -133,6 +158,8 @@ python train.py --corpus data/corpus.txt --tokenizer-dir tokenizer/vocab --steps
 2. `02_generate_corpus.ipynb` -- sample text from the OpenAI API into `data/corpus.txt`
 3. `03_train_tokenizer.ipynb` -- train the 32k-vocab BPE tokenizer and round-trip a sentence
 4. `04_train_autoencoder.ipynb` -- run the noise/encode/decode/loss training loop and plot the loss curve
+5. `05_downstream_demo.ipynb` -- reconstruction, contrastive, classification, retrieval, and
+   anomaly detection on the shared latent Z, with a graph for each head (see below)
 
 Notebook 4 defaults to a small `DEMO_CONFIG` (a few million params) so it runs on a laptop CPU;
 flip `USE_FULL_SIZE_MODEL = True` once you're on hardware that can hold the real ~1.04B-param
