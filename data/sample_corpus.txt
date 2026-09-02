@@ -23,11 +23,11 @@ Positional encodings give a transformer information about the order of tokens in
 Rotary position embeddings rotate query and key vectors by an angle that depends on their position.
 Multi head attention runs several attention computations in parallel and then combines the results.
 Weight tying shares the same matrix between the input embedding and the output projection layer.
-Gradient clipping caps the size of gradients so a single bad batch cannot destabilize training.
-Mixed precision training uses lower precision numbers for most operations to save memory and time.
-Gradient checkpointing trades extra computation for lower memory use by recomputing activations during the backward pass.
 A learning curve plots how the loss changes over the course of training.
 Data augmentation creates new training examples by slightly modifying existing ones.
+Contrastive learning pulls related examples closer together in embedding space while pushing unrelated ones apart.
+A pretrained model can be fine tuned on a smaller, task specific dataset instead of training from scratch.
+Embedding vectors that are close together under cosine similarity tend to share related meaning.
 A GPU can run thousands of small arithmetic operations in parallel, which suits matrix multiplication well.
 VRAM is the dedicated memory on a graphics card that stores model weights and activations during training.
 When a workload exceeds available GPU memory, some systems fall back to slower shared system memory.
@@ -38,6 +38,16 @@ Checkpointing periodically saves a model's weights so training can resume after 
 Distributed training splits a model or its data across multiple GPUs to speed up training.
 A batch of data is a small group of examples processed together in a single forward and backward pass.
 Profiling a training run reveals which operations consume the most time or memory.
+Gradient checkpointing trades extra computation for lower memory use by recomputing activations during the backward pass.
+A driver translates high level GPU instructions into commands the hardware can actually execute.
+Caching frequently accessed data in fast memory reduces the number of slow round trips to disk.
+A load balancer distributes incoming requests across a pool of servers to keep any one from being overwhelmed.
+Horizontal scaling adds more machines to a system, while vertical scaling adds more resources to one machine.
+A queue lets a system absorb bursts of work by processing requests in order as capacity allows.
+Version control lets a team track every change to a codebase and revert mistakes when necessary.
+Automated tests catch regressions before they reach production and affect real users.
+A staging environment mirrors production closely enough to catch problems before deployment.
+Containerization packages an application with its dependencies so it runs the same way on any machine.
 An intrusion detection system watches network traffic for patterns that suggest an attack is underway.
 Anomaly detection flags behavior that differs significantly from a system's established baseline.
 Encryption scrambles data so that only someone with the correct key can read it.
@@ -49,10 +59,15 @@ Network latency is the time it takes for a packet of data to travel from sender 
 Bandwidth measures how much data a network connection can carry in a given amount of time.
 A virtual private network routes traffic through an encrypted tunnel to protect it from eavesdropping.
 Packet loss occurs when data traveling across a network fails to reach its destination.
-Load balancing spreads incoming requests across multiple servers so no single one becomes overwhelmed.
 A zero day vulnerability is a flaw that attackers exploit before the vendor has released a fix.
 Access control lists specify exactly which users or systems are permitted to reach a given resource.
 Log analysis helps security teams reconstruct the sequence of events during an incident.
+A honeypot is a decoy system designed to attract attackers away from real infrastructure.
+Least privilege means giving every user or process only the access it strictly needs to do its job.
+A security audit systematically checks a system for misconfigurations and known vulnerabilities.
+Malware is software deliberately designed to damage, disrupt, or gain unauthorized access to a system.
+Patch management keeps software up to date so known vulnerabilities are closed before they are exploited.
+An incident response plan lays out the steps a team takes when a breach is detected.
 Photosynthesis converts sunlight, water, and carbon dioxide into glucose and oxygen inside plant cells.
 The speed of light in a vacuum is approximately three hundred thousand kilometers per second.
 DNA carries the genetic instructions used in the growth and functioning of living organisms.
@@ -63,6 +78,16 @@ The water cycle describes how water evaporates, forms clouds, falls as precipita
 An ecosystem includes all the living organisms in an area along with the physical environment they interact with.
 Climate refers to long term weather patterns, while weather describes conditions at a specific place and time.
 Antibiotics work by killing bacteria or preventing them from reproducing, but they have no effect on viruses.
+Gravity is the force that pulls objects with mass toward one another.
+An atom consists of a nucleus made of protons and neutrons, surrounded by orbiting electrons.
+Evolution by natural selection favors traits that improve an organism's chance of survival and reproduction.
+A galaxy is a vast collection of stars, gas, and dust held together by gravity.
+Mitochondria generate most of the chemical energy a cell needs to power its biochemical reactions.
+Erosion gradually wears away rock and soil through the action of wind, water, and ice.
+A vaccine trial typically moves through several phases to test safety and effectiveness before approval.
+Renewable energy sources, like solar and wind, replenish naturally and produce far fewer emissions than fossil fuels.
+The periodic table organizes chemical elements by their atomic number and recurring properties.
+A hypothesis is a testable explanation that scientists refine or discard based on experimental evidence.
 She packed a small bag, checked the weather forecast, and set out on the mountain trail before sunrise.
 To brew a good cup of coffee, grind the beans just before use and keep the water just off the boil.
 The old library smelled of paper and dust, and sunlight fell in long stripes across the reading tables.
@@ -73,13 +98,23 @@ The museum's new exhibit traces the history of printing from hand carved blocks 
 A gentle breeze moved through the open window as the orchestra tuned their instruments before the concert.
 The train pulled slowly into the station, and passengers gathered their bags along the platform.
 Before starting the assembly, lay out every part and check them against the included diagram.
+The bakery on the corner opens at dawn, and the smell of fresh bread drifts out onto the street.
+He planted the seedlings in neat rows, watered them carefully, and marked the date in his garden journal.
+The children built a small fort out of cushions and blankets in the middle of the living room floor.
+A thin layer of frost covered the windshield, so she scraped it clear before starting the engine.
+The hikers paused at the ridge to catch their breath and look out over the valley below.
 The new dashboard gives operations teams a single view of system health across every region.
 Customer feedback from the beta program shaped several of the features in this release.
 The onboarding flow now takes new users through setup in under five minutes.
 Quarterly reviews compare current performance against the targets set at the start of the year.
 The support team tracks response times to make sure customer issues are resolved quickly.
 A well documented API makes it easier for developers to integrate a service into their own applications.
-Version control lets a team track every change to a codebase and revert mistakes when necessary.
-Automated tests catch regressions before they reach production and affect real users.
-A staging environment mirrors production closely enough to catch problems before deployment.
 Clear release notes help users understand what changed and why it matters to them.
+A pricing page should make it obvious which plan fits a given customer's needs.
+Retention measures how many customers continue using a product over time instead of churning away.
+A roadmap communicates upcoming priorities to both the team building the product and the customers using it.
+Market research helps a company understand what problem it is actually solving for its customers.
+A service level agreement sets clear expectations for uptime and response times.
+Onboarding new employees well shortens the time it takes them to become fully productive.
+A postmortem after an outage focuses on what went wrong and how to prevent it, not on blame.
+Revenue growth alone does not guarantee a healthy business if costs are growing even faster.

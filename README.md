@@ -12,6 +12,37 @@ Raw Text -> Tokenizer (32k vocab) -> Noise (mask/delete/replace)
 Verified parameter count (`python inspect_model.py`): **1,041,747,456** (~1.042B), with
 tied input/output embeddings. Confirmed with an actual forward pass, not just arithmetic.
 
+## Downstream capabilities on the shared latent Z
+
+```
+                      Encoder
+                         |
+                         v
+                  Robust latent Z
+                         |
+        +--------+-------+-------+--------+
+        |        |       |       |        |
+   Reconstruct Contrast  Classify Retrieve Anomaly
+```
+
+The same pooled latent Z that the decoder cross-attends into for reconstruction also
+feeds four other heads, implemented in `model/downstream.py` and exercised end to end by
+`python run_downstream_demo.py` (trains fresh on `data/sample_corpus.tsv`, a 120-sentence
+corpus labeled across 6 topics: ml, systems, security, science, narrative, business).
+Actually run on the GTX 1650:
+
+| Head | Result |
+|---|---|
+| **Reconstruction** | Loss 320 -> 0.23 over 1500 steps (same objective as `run_demo.py`) |
+| **Contrastive** | Two independently-corrupted views of the *same* sentence score 0.025 (cosine-similarity loss, lower = more similar); shuffled/mismatched pairs score 0.086 -- the latent correctly pulls matching views closer than mismatched ones |
+| **Classification** | A linear head on pooled Z, trained 300 steps for 6-way topic classification: accuracy climbed 12% -> 75% (batch) during training, 52.5% on the full corpus (vs. a 16.7% random baseline) |
+| **Retrieval** | Cosine-similarity nearest-neighbor search over all 120 pooled embeddings; querying an ML sentence returns itself first (score 1.000), then plausible neighbors -- not perfect topic purity at this corpus size, but a real, working index |
+| **Anomaly detection** | Reconstruction-error score: 0.17 for an in-distribution sentence vs. **23.7** for an out-of-distribution string ("purple elephants compute quarterly firewalls...") -- a clear, wide separation |
+
+Same honesty caveat as the reconstruction-only demo: this is a 120-sentence corpus and a
+44.6M-param model, so treat these as *working mechanism* results, not benchmark numbers --
+scale the corpus and model size up for anything beyond a demo.
+
 ## Demo run (real, on a GTX 1650)
 
 `python run_demo.py` is a one-command, self-contained demo: trains a BPE tokenizer on
@@ -33,7 +64,7 @@ small-data overfitting / decoder-dominance effect (the decoder's own language-mo
 can "win" over the encoder's cross-attention signal when there's too little data to force it
 to rely on the latent). This is expected at this corpus size, not an architecture bug -- it's
 the same reason `train.py`'s default corpus needs to come from `data/generate_corpus.py`
-(OpenAI/Claude) or another real dataset for anything beyond a wiring demo. More, more varied
+(`data/generate_corpus.py`, OpenAI) or another real dataset for anything beyond a wiring demo. More, more varied
 training data is the fix.
 
 ## Honest scope
@@ -49,12 +80,16 @@ decoder, tied-embedding projection, loss) is correct. Point it at more data and 
 - `model/` -- the architecture (`config.py`, `layers.py`, `encoder.py`, `decoder.py`, `autoencoder.py`)
 - `noise.py` -- mask/delete/replace token corruption
 - `tokenizer/train_tokenizer.py` -- trains a byte-level BPE tokenizer to vocab_size=32000
-- `data/generate_corpus.py` -- generates training text via the OpenAI and Claude APIs
+- `data/generate_corpus.py` -- generates training text via the OpenAI API
 - `train.py` -- demo training loop (noise -> encode -> decode -> cross-entropy -> AdamW)
 - `inspect_model.py` -- parameter-count + forward-pass sanity check
 - `data/sample_corpus.txt` -- small original corpus (no API key needed) used by `run_demo.py`
+- `data/sample_corpus.tsv` -- the same corpus, labeled with topic categories, used by `run_downstream_demo.py`
 - `run_demo.py` -- one-command demo: trains tokenizer + a 44.6M-param model on `sample_corpus.txt`,
   saves a loss curve and a checkpoint, prints a reconstruction example (see below)
+- `model/downstream.py` -- contrastive loss, a classification head, retrieval, and anomaly scoring,
+  all built on the same pooled latent Z
+- `run_downstream_demo.py` -- one-command demo exercising all five heads (see below)
 - `notebooks/` -- the same pipeline as interactive notebooks (see below)
 
 ## Setup
@@ -74,10 +109,10 @@ conda activate transformer-autoencoder
 ```
 
 ```bash
-cp .env.example .env   # fill in OPENAI_API_KEY and ANTHROPIC_API_KEY, then `set -a; source .env; set +a`
+cp .env.example .env   # fill in OPENAI_API_KEY, then `set -a; source .env; set +a`
 ```
 
-Never hardcode API keys in source files -- both scripts read them from the environment only.
+Never hardcode API keys in source files -- `data/generate_corpus.py` reads it from the environment only.
 
 ## Run order
 
@@ -95,7 +130,7 @@ python train.py --corpus data/corpus.txt --tokenizer-dir tokenizer/vocab --steps
 `notebooks/` walks through the same pipeline interactively, in order:
 
 1. `01_inspect_model.ipynb` -- build the full ~1.04B-param model, confirm the count and a forward pass
-2. `02_generate_corpus.ipynb` -- sample text from the OpenAI and Claude APIs into `data/corpus.txt`
+2. `02_generate_corpus.ipynb` -- sample text from the OpenAI API into `data/corpus.txt`
 3. `03_train_tokenizer.ipynb` -- train the 32k-vocab BPE tokenizer and round-trip a sentence
 4. `04_train_autoencoder.ipynb` -- run the noise/encode/decode/loss training loop and plot the loss curve
 

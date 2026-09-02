@@ -1,0 +1,120 @@
+ml	Neural networks learn to approximate complex functions by adjusting millions of internal weights during training.
+ml	A transformer processes an entire sequence at once using self-attention instead of reading it one token at a time.
+ml	Attention lets a model decide which earlier tokens matter most when predicting the next one.
+ml	Gradient descent nudges every parameter a small step in the direction that reduces the loss.
+ml	Overfitting happens when a model memorizes the training data instead of learning general patterns.
+ml	A validation set is held back from training so researchers can check how well a model generalizes.
+ml	Backpropagation computes how much each weight contributed to the final error.
+ml	Word embeddings map each token to a dense vector that captures some of its meaning.
+ml	Layer normalization keeps activations in a stable range so deep networks train more reliably.
+ml	Dropout randomly disables some neurons during training to prevent the network from relying on any single one.
+ml	An encoder compresses an input sequence into a fixed or variable length internal representation.
+ml	A decoder expands a latent representation back into a full output sequence, one token at a time.
+ml	Autoencoders learn to reconstruct their input after passing it through a narrow bottleneck layer.
+ml	Denoising autoencoders are trained on corrupted inputs so they learn features robust to noise.
+ml	Cross entropy loss measures how far a predicted probability distribution is from the true label.
+ml	Learning rate warmup slowly increases the step size at the start of training to avoid early instability.
+ml	A cosine decay schedule gradually lowers the learning rate as training approaches its final steps.
+ml	Batch size controls how many examples the optimizer looks at before updating the weights.
+ml	Tokenization splits raw text into smaller units, such as subwords, that a model can process.
+ml	Byte pair encoding builds a vocabulary by repeatedly merging the most frequent pairs of symbols.
+ml	A large vocabulary shortens sequences but increases the size of the embedding and output layers.
+ml	Positional encodings give a transformer information about the order of tokens in a sequence.
+ml	Rotary position embeddings rotate query and key vectors by an angle that depends on their position.
+ml	Multi head attention runs several attention computations in parallel and then combines the results.
+ml	Weight tying shares the same matrix between the input embedding and the output projection layer.
+ml	A learning curve plots how the loss changes over the course of training.
+ml	Data augmentation creates new training examples by slightly modifying existing ones.
+ml	Contrastive learning pulls related examples closer together in embedding space while pushing unrelated ones apart.
+ml	A pretrained model can be fine tuned on a smaller, task specific dataset instead of training from scratch.
+ml	Embedding vectors that are close together under cosine similarity tend to share related meaning.
+systems	A GPU can run thousands of small arithmetic operations in parallel, which suits matrix multiplication well.
+systems	VRAM is the dedicated memory on a graphics card that stores model weights and activations during training.
+systems	When a workload exceeds available GPU memory, some systems fall back to slower shared system memory.
+systems	CUDA is the programming interface that lets software run general purpose computations on an NVIDIA GPU.
+systems	Mixed precision arithmetic stores numbers in sixteen bits instead of thirty two to save memory.
+systems	An optimizer like AdamW keeps a running estimate of the mean and variance of past gradients for each parameter.
+systems	Checkpointing periodically saves a model's weights so training can resume after an interruption.
+systems	Distributed training splits a model or its data across multiple GPUs to speed up training.
+systems	A batch of data is a small group of examples processed together in a single forward and backward pass.
+systems	Profiling a training run reveals which operations consume the most time or memory.
+systems	Gradient checkpointing trades extra computation for lower memory use by recomputing activations during the backward pass.
+systems	A driver translates high level GPU instructions into commands the hardware can actually execute.
+systems	Caching frequently accessed data in fast memory reduces the number of slow round trips to disk.
+systems	A load balancer distributes incoming requests across a pool of servers to keep any one from being overwhelmed.
+systems	Horizontal scaling adds more machines to a system, while vertical scaling adds more resources to one machine.
+systems	A queue lets a system absorb bursts of work by processing requests in order as capacity allows.
+systems	Version control lets a team track every change to a codebase and revert mistakes when necessary.
+systems	Automated tests catch regressions before they reach production and affect real users.
+systems	A staging environment mirrors production closely enough to catch problems before deployment.
+systems	Containerization packages an application with its dependencies so it runs the same way on any machine.
+security	An intrusion detection system watches network traffic for patterns that suggest an attack is underway.
+security	Anomaly detection flags behavior that differs significantly from a system's established baseline.
+security	Encryption scrambles data so that only someone with the correct key can read it.
+security	A firewall filters incoming and outgoing network traffic according to a set of security rules.
+security	Phishing attacks trick people into revealing passwords or other sensitive information.
+security	Multi factor authentication requires more than one piece of evidence before granting access to an account.
+security	A denial of service attack overwhelms a system with traffic until it can no longer respond to legitimate requests.
+security	Network latency is the time it takes for a packet of data to travel from sender to receiver.
+security	Bandwidth measures how much data a network connection can carry in a given amount of time.
+security	A virtual private network routes traffic through an encrypted tunnel to protect it from eavesdropping.
+security	Packet loss occurs when data traveling across a network fails to reach its destination.
+security	A zero day vulnerability is a flaw that attackers exploit before the vendor has released a fix.
+security	Access control lists specify exactly which users or systems are permitted to reach a given resource.
+security	Log analysis helps security teams reconstruct the sequence of events during an incident.
+security	A honeypot is a decoy system designed to attract attackers away from real infrastructure.
+security	Least privilege means giving every user or process only the access it strictly needs to do its job.
+security	A security audit systematically checks a system for misconfigurations and known vulnerabilities.
+security	Malware is software deliberately designed to damage, disrupt, or gain unauthorized access to a system.
+security	Patch management keeps software up to date so known vulnerabilities are closed before they are exploited.
+security	An incident response plan lays out the steps a team takes when a breach is detected.
+science	Photosynthesis converts sunlight, water, and carbon dioxide into glucose and oxygen inside plant cells.
+science	The speed of light in a vacuum is approximately three hundred thousand kilometers per second.
+science	DNA carries the genetic instructions used in the growth and functioning of living organisms.
+science	A black hole forms when a massive star collapses under its own gravity at the end of its life.
+science	Tectonic plates are large slabs of rock that slowly shift across the surface of the earth.
+science	Vaccines train the immune system to recognize and fight a specific pathogen without causing the disease itself.
+science	The water cycle describes how water evaporates, forms clouds, falls as precipitation, and flows back to the sea.
+science	An ecosystem includes all the living organisms in an area along with the physical environment they interact with.
+science	Climate refers to long term weather patterns, while weather describes conditions at a specific place and time.
+science	Antibiotics work by killing bacteria or preventing them from reproducing, but they have no effect on viruses.
+science	Gravity is the force that pulls objects with mass toward one another.
+science	An atom consists of a nucleus made of protons and neutrons, surrounded by orbiting electrons.
+science	Evolution by natural selection favors traits that improve an organism's chance of survival and reproduction.
+science	A galaxy is a vast collection of stars, gas, and dust held together by gravity.
+science	Mitochondria generate most of the chemical energy a cell needs to power its biochemical reactions.
+science	Erosion gradually wears away rock and soil through the action of wind, water, and ice.
+science	A vaccine trial typically moves through several phases to test safety and effectiveness before approval.
+science	Renewable energy sources, like solar and wind, replenish naturally and produce far fewer emissions than fossil fuels.
+science	The periodic table organizes chemical elements by their atomic number and recurring properties.
+science	A hypothesis is a testable explanation that scientists refine or discard based on experimental evidence.
+narrative	She packed a small bag, checked the weather forecast, and set out on the mountain trail before sunrise.
+narrative	To brew a good cup of coffee, grind the beans just before use and keep the water just off the boil.
+narrative	The old library smelled of paper and dust, and sunlight fell in long stripes across the reading tables.
+narrative	He tightened the last bolt, wiped his hands on a rag, and stepped back to admire the finished bookshelf.
+narrative	The recipe calls for two cups of flour, a pinch of salt, and enough water to form a soft dough.
+narrative	After the storm passed, the fishermen returned to the harbor to check on their boats and nets.
+narrative	The museum's new exhibit traces the history of printing from hand carved blocks to modern digital presses.
+narrative	A gentle breeze moved through the open window as the orchestra tuned their instruments before the concert.
+narrative	The train pulled slowly into the station, and passengers gathered their bags along the platform.
+narrative	Before starting the assembly, lay out every part and check them against the included diagram.
+narrative	The bakery on the corner opens at dawn, and the smell of fresh bread drifts out onto the street.
+narrative	He planted the seedlings in neat rows, watered them carefully, and marked the date in his garden journal.
+narrative	The children built a small fort out of cushions and blankets in the middle of the living room floor.
+narrative	A thin layer of frost covered the windshield, so she scraped it clear before starting the engine.
+narrative	The hikers paused at the ridge to catch their breath and look out over the valley below.
+business	The new dashboard gives operations teams a single view of system health across every region.
+business	Customer feedback from the beta program shaped several of the features in this release.
+business	The onboarding flow now takes new users through setup in under five minutes.
+business	Quarterly reviews compare current performance against the targets set at the start of the year.
+business	The support team tracks response times to make sure customer issues are resolved quickly.
+business	A well documented API makes it easier for developers to integrate a service into their own applications.
+business	Clear release notes help users understand what changed and why it matters to them.
+business	A pricing page should make it obvious which plan fits a given customer's needs.
+business	Retention measures how many customers continue using a product over time instead of churning away.
+business	A roadmap communicates upcoming priorities to both the team building the product and the customers using it.
+business	Market research helps a company understand what problem it is actually solving for its customers.
+business	A service level agreement sets clear expectations for uptime and response times.
+business	Onboarding new employees well shortens the time it takes them to become fully productive.
+business	A postmortem after an outage focuses on what went wrong and how to prevent it, not on blame.
+business	Revenue growth alone does not guarantee a healthy business if costs are growing even faster.

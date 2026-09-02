@@ -1,11 +1,10 @@
-"""Generate a training corpus by sampling text from the OpenAI and Claude APIs.
+"""Generate a training corpus by sampling text from the OpenAI API.
 
-Both API keys are read from environment variables only -- never hardcode them:
+The API key is read from an environment variable only -- never hardcode it:
     OPENAI_API_KEY
-    ANTHROPIC_API_KEY
 
 Usage:
-    python data/generate_corpus.py --provider both --num-samples 200 --out data/corpus.txt
+    python data/generate_corpus.py --num-samples 200 --out data/corpus.txt
 """
 import argparse
 import os
@@ -33,40 +32,17 @@ def gen_openai(client, topic: str, model: str) -> str:
     return resp.choices[0].message.content.strip()
 
 
-def gen_claude(client, topic: str, model: str) -> str:
-    resp = client.messages.create(
-        model=model,
-        max_tokens=300,
-        temperature=1.0,
-        system="Write natural, varied English prose. No markdown, no lists.",
-        messages=[{"role": "user", "content": f"Write a self-contained paragraph in the style of {topic}."}],
-    )
-    return "".join(block.text for block in resp.content if block.type == "text").strip()
-
-
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--provider", choices=["openai", "claude", "both"], default="both")
     p.add_argument("--num-samples", type=int, default=200)
     p.add_argument("--out", default="data/corpus.txt")
     p.add_argument("--openai-model", default="gpt-4.1-mini")
-    p.add_argument("--claude-model", default="claude-sonnet-5")
     args = p.parse_args()
 
-    openai_client = None
-    claude_client = None
-
-    if args.provider in ("openai", "both"):
-        if not os.environ.get("OPENAI_API_KEY"):
-            raise SystemExit("OPENAI_API_KEY is not set in the environment.")
-        from openai import OpenAI
-        openai_client = OpenAI()
-
-    if args.provider in ("claude", "both"):
-        if not os.environ.get("ANTHROPIC_API_KEY"):
-            raise SystemExit("ANTHROPIC_API_KEY is not set in the environment.")
-        from anthropic import Anthropic
-        claude_client = Anthropic()
+    if not os.environ.get("OPENAI_API_KEY"):
+        raise SystemExit("OPENAI_API_KEY is not set in the environment.")
+    from openai import OpenAI
+    openai_client = OpenAI()
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -75,14 +51,8 @@ def main():
     with out_path.open("a", encoding="utf-8") as f:
         while written < args.num_samples:
             topic = DEFAULT_TOPICS[written % len(DEFAULT_TOPICS)]
-            use_openai = args.provider == "openai" or (args.provider == "both" and written % 2 == 0)
             try:
-                if use_openai and openai_client is not None:
-                    text = gen_openai(openai_client, topic, args.openai_model)
-                elif claude_client is not None:
-                    text = gen_claude(claude_client, topic, args.claude_model)
-                else:
-                    text = gen_openai(openai_client, topic, args.openai_model)
+                text = gen_openai(openai_client, topic, args.openai_model)
             except Exception as e:
                 print(f"generation failed ({e}), retrying in 5s")
                 time.sleep(5)
