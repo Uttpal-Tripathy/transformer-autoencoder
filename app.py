@@ -188,8 +188,76 @@ the live version of `notebooks/05_downstream_demo.ipynb` and `run_downstream_dem
 """
 
 
-with gr.Blocks(title="RAE-1B Live Testing") as demo:
-    gr.Markdown("# RAE-1B: Real-Time Testing App")
+CYBERPUNK_THEME = gr.themes.Base(
+    primary_hue=gr.themes.Color(
+        c50="#e6ffff", c100="#ccffff", c200="#99ffff", c300="#66fff9", c400="#2bfff2",
+        c500="#00fff2", c600="#00cfc4", c700="#009e96", c800="#006e68", c900="#003d3a", c950="#001f1d",
+    ),
+    secondary_hue=gr.themes.Color(
+        c50="#ffe6fb", c100="#ffccf7", c200="#ff99ef", c300="#ff66e7", c400="#ff33df",
+        c500="#ff00d4", c600="#cc00aa", c700="#990080", c800="#660055", c900="#33002b", c950="#1a0016",
+    ),
+    neutral_hue=gr.themes.Color(
+        c50="#e9e9f5", c100="#c7c7dd", c200="#9a9ac0", c300="#6d6da3", c400="#454570",
+        c500="#26263f", c600="#1a1a2e", c700="#131320", c800="#0d0d16", c900="#08080e", c950="#020204",
+    ),
+    font=[gr.themes.GoogleFont("Orbitron"), "ui-sans-serif", "system-ui", "sans-serif"],
+    font_mono=[gr.themes.GoogleFont("Share Tech Mono"), "ui-monospace", "Consolas", "monospace"],
+).set(
+    body_background_fill="#05050a",
+    body_background_fill_dark="#05050a",
+    background_fill_primary="#0d0d16",
+    background_fill_primary_dark="#0d0d16",
+    background_fill_secondary="#131320",
+    background_fill_secondary_dark="#131320",
+    border_color_accent="#00fff2",
+    border_color_accent_dark="#00fff2",
+    border_color_primary="#2a2a45",
+    border_color_primary_dark="#2a2a45",
+    block_background_fill="#0d0d16",
+    block_background_fill_dark="#0d0d16",
+    block_border_color="#1f1f38",
+    block_border_color_dark="#00fff2",
+    block_label_text_color="#00fff2",
+    block_label_text_color_dark="#00fff2",
+    block_title_text_color="#ff00d4",
+    block_title_text_color_dark="#ff00d4",
+    body_text_color="#d6d6ff",
+    body_text_color_dark="#d6d6ff",
+    button_primary_background_fill="linear-gradient(90deg, #00fff2, #ff00d4)",
+    button_primary_background_fill_dark="linear-gradient(90deg, #00fff2, #ff00d4)",
+    button_primary_text_color="#05050a",
+    button_primary_text_color_dark="#05050a",
+    input_background_fill="#0d0d16",
+    input_background_fill_dark="#0d0d16",
+    input_border_color="#2a2a45",
+    input_border_color_dark="#00fff2",
+    slider_color="#ff00d4",
+    slider_color_dark="#ff00d4",
+)
+
+CYBERPUNK_CSS = """
+.gradio-container {
+    background: radial-gradient(circle at 20% 0%, #14142a 0%, #05050a 55%) !important;
+}
+h1, h2, h3 {
+    text-shadow: 0 0 6px #00fff2, 0 0 16px #00fff2aa;
+    letter-spacing: 0.03em;
+}
+.tab-nav button {
+    text-shadow: 0 0 4px currentColor;
+}
+button.primary {
+    box-shadow: 0 0 10px #00fff2, 0 0 20px #ff00d466;
+    border: none !important;
+}
+textarea, input[type="text"], input[type="number"] {
+    box-shadow: inset 0 0 6px #00fff233;
+}
+"""
+
+with gr.Blocks(title="RAE-1B Live Testing", theme=CYBERPUNK_THEME, css=CYBERPUNK_CSS) as demo:
+    gr.Markdown("# ⚡ RAE-1B :: REAL-TIME TESTING TERMINAL ⚡")
     gr.Markdown(
         "Type text into any tab below to test the trained transformer autoencoder live. "
         "**Classify** and **Anomaly** update as you type; **Reconstruct** and **Retrieve** "
