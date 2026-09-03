@@ -24,9 +24,17 @@ python train_and_export.py   # one-time: trains + saves checkpoints/app_bundle.p
 python app.py                 # serves on http://localhost:7860
 ```
 
+On Windows, double-click **`run_app.bat`** instead: it trains the bundle if one doesn't
+exist yet, starts the server in its own window, and opens your browser to it automatically.
+Verified end to end -- it correctly skipped training when a bundle already existed, the
+server came up in ~15-20s in an independent window, and the app responded correctly to a
+real request through it.
+
 - **Reconstruct** and **Retrieve** run on submit (a button/Enter) since they involve
   randomized noise or a larger search -- keeping results reproducible per click.
 - **Classify** and **Anomaly** update live as you type.
+- Styled with a custom cyberpunk theme (neon cyan/magenta on near-black, glowing
+  headers/buttons) defined in `app.py`.
 
 See **Deploy** below to containerize it.
 
@@ -136,6 +144,7 @@ decoder, tied-embedding projection, loss) is correct. Point it at more data and 
 - `train_and_export.py` -- trains the app's model + classifier and saves `checkpoints/app_bundle.pt`
 - `app.py` -- real-time Gradio app serving all five capabilities (see **Live testing app** below)
 - `Dockerfile` / `.dockerignore` -- containerized deployment (see **Deploy** below)
+- `run_app.bat` -- Windows one-click launcher: trains if needed, starts the server, opens your browser
 - `notebooks/` -- the same pipeline as interactive notebooks (see below)
 
 ## Setup
