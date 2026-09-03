@@ -6,3 +6,6 @@ openai>=1.30
 jupyter>=1.0
 matplotlib>=3.8
 python-dotenv>=1.0
+
+# app
+gradio>=5.0

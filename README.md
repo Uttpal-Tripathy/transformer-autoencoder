@@ -12,6 +12,24 @@ Raw Text -> Tokenizer (32k vocab) -> Noise (mask/delete/replace)
 Verified parameter count (`python inspect_model.py`): **1,041,747,456** (~1.042B), with
 tied input/output embeddings. Confirmed with an actual forward pass, not just arithmetic.
 
+## Live testing app
+
+`app.py` is a real-time Gradio app serving the exact same capabilities the notebooks
+demonstrate -- reconstruction, classification, retrieval, and anomaly detection, all
+reading from one trained encoder. It's the live version of
+`notebooks/05_downstream_demo.ipynb`.
+
+```bash
+python train_and_export.py   # one-time: trains + saves checkpoints/app_bundle.pt
+python app.py                 # serves on http://localhost:7860
+```
+
+- **Reconstruct** and **Retrieve** run on submit (a button/Enter) since they involve
+  randomized noise or a larger search -- keeping results reproducible per click.
+- **Classify** and **Anomaly** update live as you type.
+
+See **Deploy** below to containerize it.
+
 ## Downstream capabilities on the shared latent Z
 
 ```
@@ -115,6 +133,9 @@ decoder, tied-embedding projection, loss) is correct. Point it at more data and 
 - `run_downstream_demo.py` -- one-command demo exercising all five heads (see below), saving a graph per head to `docs/`
 - `docs/` -- generated graphs referenced by this README (loss curves, contrastive/anomaly bar charts, the PCA embedding plot)
 - `notebooks/05_downstream_demo.ipynb` -- the same five-head demo, interactively, importing the exact functions `run_downstream_demo.py` uses
+- `train_and_export.py` -- trains the app's model + classifier and saves `checkpoints/app_bundle.pt`
+- `app.py` -- real-time Gradio app serving all five capabilities (see **Live testing app** below)
+- `Dockerfile` / `.dockerignore` -- containerized deployment (see **Deploy** below)
 - `notebooks/` -- the same pipeline as interactive notebooks (see below)
 
 ## Setup
@@ -203,3 +224,50 @@ against your driver).
   is only suitable for the wiring check above.
 - Consider mixed precision (`torch.autocast`) and gradient checkpointing to fit the ~1B-param
   model's activations in memory at larger batch/sequence sizes.
+
+## Deploy
+
+Train once, then package the result -- **not** the other way around. An earlier version of
+`Dockerfile` ran `train_and_export.py` at build time, but CPU training inside a build step
+turned out too slow to be a reliable build (it stalled well past 15+ minutes on a 2-CPU
+podman VM with no progress) -- exactly the kind of thing that blows through the build-time
+limits most CI/PaaS platforms enforce. `Dockerfile` now just `COPY`s in an already-trained
+`checkpoints/app_bundle.pt` and `tokenizer/vocab/`, so the image build is just installing
+dependencies and copying files (fast, no training):
+
+```bash
+python train_and_export.py     # train locally first (GPU recommended; CPU works, just slower)
+podman build -t rae1b-app .    # or: docker build -t rae1b-app .
+podman run -p 7860:7860 rae1b-app
+# -> http://localhost:7860
+```
+
+`Dockerfile` works unchanged with either Docker or Podman -- nothing in it is Docker-specific.
+No Firebase or any other specific cloud vendor is used anywhere in this repo.
+
+**Verified, with one caveat:** the image builds successfully and the app serves correctly
+*inside* the container -- confirmed with `podman exec rae1b-test python -c "urllib.request
+.urlopen('http://localhost:7860')"` returning `200`, after the same functional test suite
+used on `python app.py` directly (reconstruct, classify, retrieve, anomaly, all via
+`gradio_client` against the real container). What I could **not** verify on this particular
+machine: reaching that port from the Windows host (`localhost:7861` on the host, mapped from
+the container's `7860`) -- `podman machine` restarts and direct-VM-IP attempts didn't resolve
+it. That looks like a local Windows/WSL2/podman-machine port-forwarding quirk on this dev
+box specifically, not a defect in the image -- real container platforms (Render, Railway,
+Fly.io, HF Spaces) route to the container's exposed port directly, without a Windows-host-to-
+VM hop in between, so this class of issue shouldn't occur there. If you hit the same thing
+locally, `podman exec <container> python -c "..."` (as above) or `docker exec` is a reliable
+way to confirm the app itself is fine even when host-to-container access is flaky.
+
+`app.py` reads `PORT` from the environment (defaults to 7860) and binds `0.0.0.0`, which is
+what most container platforms expect (they inject `PORT` and route to it) -- for example
+Render, Railway, Fly.io, a plain VPS, or Hugging Face Spaces' Docker SDK. All of these just
+need "point at this Dockerfile"; none of them are Firebase. Since the bundle is trained
+locally and not committed to git (`checkpoints/` is gitignored -- it's ~180MB, well past
+what belongs in a git repo), a from-scratch CI build needs a step that runs
+`train_and_export.py` (or fetches a previously-trained bundle from wherever you choose to
+store build artifacts) before the `docker build`/`podman build` step.
+
+To retrain with a different corpus or model size, edit the `--corpus`, `--recon-steps`,
+`--classifier-steps`, or the `d_model`/layer settings in `train_and_export.py` (they mirror
+`run_downstream_demo.py`'s `--` flags), rerun it, then rebuild the image.

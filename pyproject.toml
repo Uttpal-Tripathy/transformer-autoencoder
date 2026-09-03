@@ -26,6 +26,9 @@ notebooks = [
     "pyyaml",
     "tqdm",
 ]
+app = [
+    "gradio>=5.0",
+]
 
 [tool.setuptools.packages.find]
 include = ["model*"]
